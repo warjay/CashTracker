@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace CashTracker
 {
     public partial class Form1 : Form
@@ -16,12 +17,19 @@ namespace CashTracker
         public Form1()
         {
             InitializeComponent();
+            // Load Saved Data (if any)
+            Serializer.LoadListViewItemsFromXml("listviewdata.xml", listView1);
         }
 
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
 
         }
+
+
+
+        
+        
 
         void updateTotal()
         {
@@ -31,6 +39,8 @@ namespace CashTracker
                 total += decimal.Parse(i.SubItems[2].Text);
             }
             totalLabel.Text = $"Total: {total.ToString()}";
+            // Also Save To Disk
+            Serializer.SaveListViewItemsToXml("listviewdata.xml", listView1);
         }
 
         ListViewItem getEntryInput(ListViewItem old = null)
@@ -93,6 +103,7 @@ namespace CashTracker
                 if (newEntry != null)
                 {
                     listView1.Items[listView1.SelectedIndices[0]] = newEntry;
+                    updateTotal();
                 }   
             }
             else
